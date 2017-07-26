@@ -140,6 +140,6 @@ Histogram of data before and after augmentation
 ![After Augmentation](https://github.com/devksingh/Behavioural-Cloning-P3/blob/master/Training_Data_After_Augmentation.png)
 
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 7 as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
