@@ -1,8 +1,7 @@
 #**Behavioral Cloning** 
 
-##Writeup Template
+##Udacity-Self Driving Car Project-3
 
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
 
 ---
 
