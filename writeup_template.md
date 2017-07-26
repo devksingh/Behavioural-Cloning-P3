@@ -91,7 +91,7 @@ My aim was to have:
 1. Balance data as the correct data was skewed on zero (because car drives straight most of the time)
 2. To have data recovering from left and right drift, so that if model can learn to recover from drifts
 
-I used nVIDIA, VGG and comma.ai CNN model as option for training, I started with nVidia and it worked well for me.
+I had nVIDIA, VGG and comma.ai CNN model as option for training, I started with nVidia and it worked well for me.
 
 I split the data (80-20) for training and validationm, generated the data on run time using fit_generator feature to optimize memory usage, avoided overfitting by having 3 layers of dropout. I tried 3,5, 7 epochs and 7 worked for me.
 
@@ -101,7 +101,8 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 ####2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes 1. Input size 66x200x3 shape.
+The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes
+1. Input size 66x200x3 shape.
 2. Used Lambada to normalize the data
 3. 24 filter of Convolution2D (5x5) kernal followed by ELU activation
 4. 36 filter of Convolution2D (5x5) kernal followed by ELU activation
