@@ -53,76 +53,93 @@ The model.py file contains the code for training and saving the convolution neur
 
 ####1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
-
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+I implemented nVIDIA CNN model for training/prediction and used Pyhton/Keras to implement the model. 
+1. Input size 66x200x3 shape.
+2. Used Lambada to normalize the data
+3. 24 filter of Convolution2D (5x5) kernal followed by ELU activation
+4. 36 filter of Convolution2D (5x5) kernal followed by ELU activation
+5. 48 filter of Convolution2D (5x5) kernal followed by ELU activation
+6. 64 filter of Convolution2D (3x3) kernal followed by ELU activation
+7. 64 filter of Convolution2D (3x3) kernal followed by ELU activation
+8. flatten layer
+9. Dense layer (100) followed by ELU activation and dropout (.5) to avoid overfitting
+10. Dense layer (50) followed by ELU activation and dropout (.5) to avoid overfitting
+11. Dense layer (10) followed by ELU activation and dropout (.5) to avoid overfitting
+12. Output Dense layer (1)
+13. Used mse loss and Adam optimizer
+14. Used fit generator to optimize memory usage
 
 ####2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+The model contains dropout (.5) layers after last 3 dense layers in order to reduce overfitting (model.py lines 124, 127 & 130). 
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets, used sklearn to split the dataset into training and validation. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 ####3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 134).
 
 ####4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
-
-For details about how I created the training data, see the next section. 
+I chose data provide by Udacity to train the model, used various data Augmentation method to make it more versatile. Details of data augmentation is discussed in next paragraph.
 
 ###Model Architecture and Training Strategy
 
 ####1. Solution Design Approach
+Preparing data for Training was the crucial part of my project. As suggested by David in project description, the data should have variety for the model to train e.g. turning, recovering from left/right drifting, removing left bias, driving on the center of the road.
+My aim was to have: 
+1. Balance data as the correct data was skewed on zero (because car drives straight most of the time)
+2. To have data recovering from left and right drift, so that if model can learn to recover from drifts
 
-The overall strategy for deriving a model architecture was to ...
+I used nVIDIA, VGG and comma.ai CNN model as option for training, I started with nVidia and it worked well for me.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+I split the data (80-20) for training and validationm, generated the data on run time using fit_generator feature to optimize memory usage, avoided overfitting by having 3 layers of dropout. I tried 3,5, 7 epochs and 7 worked for me.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
-
-To combat the overfitting, I modified the model so that ...
-
-Then I ... 
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle drifted on the sides but it recovered immediately..
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
 ####2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes 1. Input size 66x200x3 shape.
+2. Used Lambada to normalize the data
+3. 24 filter of Convolution2D (5x5) kernal followed by ELU activation
+4. 36 filter of Convolution2D (5x5) kernal followed by ELU activation
+5. 48 filter of Convolution2D (5x5) kernal followed by ELU activation
+6. 64 filter of Convolution2D (3x3) kernal followed by ELU activation
+7. 64 filter of Convolution2D (3x3) kernal followed by ELU activation
+8. flatten layer
+9. Dense layer (100) followed by ELU activation and dropout (.5) to avoid overfitting
+10. Dense layer (50) followed by ELU activation and dropout (.5) to avoid overfitting
+11. Dense layer (10) followed by ELU activation and dropout (.5) to avoid overfitting
+12. Output Dense layer (1)
+13. Used mse loss and Adam optimizer
+14. Used fit generator to optimize memory usage
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+![nVIDIA CNN Model](https://github.com/devksingh/Behavioural-Cloning-P3/blob/master/nVidia%20CNN%20Model.png)
 
-![alt text][image1]
 
 ####3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
+Following was the strategy for data augmentation:
+1. Correcting steering angle of left and right image (+0.23 for left and -0.23 for right) - this to help drift recovery
+2. Moving the image by random number of pixels horizontly left and right by using cv2warpaffine funtion and using .004/pixel as steering angle correction - Again this is to simnulate drift recovery
+3. Flip the image and multiply -1 to steering angle
+Training Data included:
+1. Center image 
+2. Horizontly shifted center image by random pixel
+3. Horizontly shifted left and right image by random pixel
+Please note I did not use left and right image as it is with corrected steering angle since the original data was skewed to zero and thie augmentaion woould have made final data to be skewed on -0.23, 0 and +0.23
+I did not use manipulating brightness or shadow on the picture and there is no variation of brightness and shadow on the given track so learning that would have been useless for project output.
 
-![alt text][image2]
+After augmentation images were cropped by 50px top and 25 px bottom (to avoid insignificant data) and resized to 66x200
 
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+Histogram of data before and after augmentation
+![Before Augmentation](https://github.com/devksingh/Behavioural-Cloning-P3/blob/master/Trainig_Data.png)
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+![After Augmentation](https://github.com/devksingh/Behavioural-Cloning-P3/blob/master/Training_Data_After_Augmentation.png)
 
 
 I finally randomly shuffled the data set and put Y% of the data into a validation set. 
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 7 as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
