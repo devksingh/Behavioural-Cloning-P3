@@ -140,6 +140,17 @@ Histogram of data before and after augmentation
 
 ![After Augmentation](https://github.com/devksingh/Behavioural-Cloning-P3/blob/master/Training_Data_After_Augmentation.png)
 
+Here are the augmented images:
+
+
+![Data1](https://github.com/devksingh/Behavioural-Cloning-P3/blob/master/data1.png)
+
+
+![Data2](https://github.com/devksingh/Behavioural-Cloning-P3/blob/master/data2.png)
+
+
+![Data3](https://github.com/devksingh/Behavioural-Cloning-P3/blob/master/data3.png)
+
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
